@@ -4,6 +4,12 @@ A responsive, single-file web dashboard for selected **Pilote / Scheiber Xperien
 
 > **Independent hobby project.** Not affiliated with, endorsed by, or supported by Pilote, Scheiber, or Truma. The application is experimental and should never be relied upon as the sole means of controlling safety-critical equipment.
 
+## Screenshot
+
+![Xperience 2.0 dashboard — demo mode](assets/dashboard-screenshot.png)
+
+*Dashboard at 1024 × 600. Demo values only; no physical controls are operated.*
+
 ## Current status
 
 **Prototype / use at your own risk.** The interface has been tested with one specific Scheiber installation. Device availability, field names, control semantics and firmware behavior may differ across motorhomes.
