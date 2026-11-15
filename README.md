@@ -39,18 +39,29 @@ The repository includes:
 4. Enter your own Scheiber tablet/bridge host address (the default `192.168.1.100` is a placeholder), or a full `ws://` / `wss://` URL.
 5. Choose **Connect (live mode)** to receive real readings. Start in **Demo mode** if you only want to explore the interface.
 
-### GL.iNet GL-X3000 / OpenWrt example
+### Option A: Your Wi-Fi router (if SSH and web hosting are available)
 
-With the router's built-in `uhttpd` web server:
+If your Wi-Fi router supports SSH/SCP **and** serves static HTML files, you can host the app there. The document root and login name vary by router; check its documentation first.
+
+For an OpenWrt-based router using the default `uhttpd` document root, for example:
 
 ```sh
-# Run on your Mac/Linux computer (adapt the path and router IP):
-scp -O index.html root@192.168.8.1:/www/xperience2.html
+# Run on your computer; replace the example router address.
+scp -O index.html root@192.168.1.1:/www/xperience2.html
 ```
 
-Then browse to `http://192.168.8.1/xperience2.html` from an authorized device. On the router, `/etc/init.d/uhttpd status` can help verify that the web server is running.
+Open `http://192.168.1.1/xperience2.html` in a browser connected to that Wi-Fi network. Other router models use different paths or may not support hosting files at all. SSH by itself is not enough: an HTTP server must also be enabled.
 
-**Note:** The example addresses are installation-specific; do not copy them blindly. Access to the page does not automatically mean the browser can reach the Scheiber WebSocket endpoint. If the tablet is on a guest VLAN or connected over Tailscale, check routes and firewall policy separately. Restrict forwarding to the necessary destination and TCP port instead of opening the entire guest network.
+### Option B: From your phone (no router SSH required)
+
+1. Download `index.html` to your phone.
+2. For a quick look, open it in a browser or file viewer that accepts local HTML files; **Demo mode** may work this way.
+3. For a reliable live connection, serve the file over HTTP from a trusted device or a local HTTP-server app on your phone, and open its local URL in the phone's browser.
+4. Connect your phone to a network that can reach the Scheiber WebSocket host; enter its address under **Settings → Scheiber connection**.
+
+A local `file://` page may be restricted from connecting to WebSockets on some mobile browsers. Phone-based hosting does not bypass Wi-Fi guest isolation, VPN routing rules, or browser mixed-content protections.
+
+**Note:** The addresses above are examples only. Loading the web page does not guarantee that the browser can reach the Scheiber WebSocket endpoint. If the tablet is on another network, check routing and firewall rules; grant access only to the required destination and port.
 
 ## Networking and security
 
@@ -76,7 +87,7 @@ Then browse to `http://192.168.8.1/xperience2.html` from an authorized device. O
 
 - Original target: an old Android 4.4.x in-vehicle tablet; current desktop and mobile browsers may behave differently.
 - If the UI shows **OFFLINE**, check the WebSocket URL, tablet reachability, firewall rules and browser console.
-- If the browser reaches the router page but not the tablet WebSocket, remember that WebSocket connections originate from the **browser device**, not from the server hosting `index.html`.
+- If the browser loads the page but cannot reach the Scheiber WebSocket, remember that the WebSocket connection originates from the **browser device**, not from the server hosting `index.html`.
 - Control buttons remain disabled until a live connection provides supported, valid device state and the user explicitly unlocks controls.
 - A stale or unavailable reading must not be interpreted as an OFF or zero value.
 
